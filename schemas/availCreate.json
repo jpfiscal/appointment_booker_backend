@@ -1,0 +1,64 @@
+{
+    "$schema": "https://json-schema.org/draft/2019-09/schema",
+    "$id": "http://example.com/example.json",
+    "type": "object",
+    "default": {},
+    "title": "Root Schema",
+    
+    "properties": {
+        "availabilities":{
+            "type": "array",
+            "items": {
+                "type": "object",
+                "required": [
+                    "date",
+                    "start_time",
+                    "end_time"
+                ],
+                "properties":{
+                    "date": {
+                        "type": "string",
+                        "format": "date",
+                        "title": "The Date Schema",
+                        "examples": [
+                            "2024-05-01"
+                        ]
+                    },
+                    "start_time": {
+                        "type": "string",
+                        "format": "time",
+                        "title": "The Start Time Schema",
+                        "examples": [
+                            "09:00:00"
+                        ]
+                    },
+                    "end_time": {
+                        "type": "string",
+                        "format": "time",
+                        "title": "The End Time Schema",
+                        "examples": [
+                            "12:00:00"
+                        ]
+                    }
+                }
+            },
+            "title": "The Create availabilities Schema"
+        }
+        
+    },
+    "examples": [
+        {
+            "availabilities":[{
+                    "date": "2024-11-01",
+                    "start_time": "13:00:00",
+                    "end_time": "14:00:00"
+                },
+                {
+                    "date": "2024-11-01",
+                    "start_time": "14:00:00",
+                    "end_time": "15:00:00"
+                }
+            ]
+        }
+    ]
+}

@@ -1,0 +1,72 @@
+{
+    "$schema": "https://json-schema.org/draft/2019-09/schema",
+    "$id": "http://example.com/example.json",
+    "type": "object",
+    "default": {},
+    "title": "Root Schema",
+    "required": [],
+    "properties": {
+        "gender": {
+            "type": "string",
+            "title": "The Gender Schema",
+            "examples": [
+                "M", "F"
+            ]
+        },
+        "birthdayFrom": {
+            "type": "string",
+            "format": "date",
+            "title": "The Birthday From Schema",
+            "examples": [
+                "2000-01-01",
+                "1988-01-01"
+            ]
+        },
+        "birthdayTo": {
+            "type": "string",
+            "format": "date",
+            "title": "The Birthday To Schema",
+            "examples": [
+                "2024-10-01",
+                "1995-12-31"
+            ]
+        },
+        "city": {
+            "type": "string",
+            "title": "The City Schema",
+            "examples": [
+                "Dallas",
+                "Atlanta"
+            ]
+        },
+        "state": {
+            "type": "string",
+            "title": "The State Schema",
+            "examples": [
+                "AR", "ON"
+            ]
+        }, 
+        "email": {
+            "type": "string",
+            "format": "email",
+            "title": "The Email Schema",
+            "examples": [
+                "big_guns_mcgee@hotmail.com",
+                "hello@hey.com"
+            ]
+        }
+    },
+    "examples": [
+        {},
+        {
+            "gender": "F",
+            "birthdayFrom": "1988-01-01",
+            "birthdayTo": "1999-12-31",
+            "city": "New York",
+            "state": "NY"
+        },
+        {
+            "email": "hello@hey.com"
+        }
+    ]
+}

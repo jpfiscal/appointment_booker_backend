@@ -1,0 +1,54 @@
+{
+    "$schema": "https://json-schema.org/draft/2019-09/schema",
+    "$id": "http://example.com/example.json",
+    "type": "object",
+    "default": {},
+    "title": "Root Schema",
+    "required": [
+        "client_id",
+        "service_id",
+        "availabilities"
+    ],
+    "properties": {
+        "client_id": {
+            "type": "integer",
+            "title": "The Client ID Schema",
+            "examples": [
+                1, 2, 3
+            ]
+        },
+        "service_id": {
+            "type": "integer",
+            "title": "The Service ID Schema",
+            "examples": [
+                1, 2, 3
+            ]
+        },
+        "availabilities": {
+            "type": "array",
+            "items": {
+                "type": "integer"
+            },
+            "title": "The Availability List Schema",
+            "examples": [
+                [1,4,8]
+            ]
+        },
+        "client_note": {
+            "type": "string",
+            "format": "date",
+            "title": "The Client Note Schema",
+            "examples": [
+                "allergies: x, y, z"
+            ]
+        }
+    },
+    "examples": [
+        {
+            "client_id": 1,
+            "service_id": 2,
+            "availabilities": [6,7,8],
+            "client_note": "skin is sensative to numbing solutions."
+        }
+    ]
+}

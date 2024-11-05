@@ -1,0 +1,63 @@
+{
+    "$schema": "https://json-schema.org/draft/2019-09/schema",
+    "$id": "http://example.com/example.json",
+    "type": "object",
+    "default": {},
+    "title": "Root Schema",
+    "required": [],
+    "properties": {
+        "provider_id": {
+            "type": "integer",
+            "title": "The Provider ID Schema",
+            "examples": [
+                1, 2, 3
+            ]
+        },
+        "name": {
+            "type": "string",
+            "title": "The Name Schema",
+            "examples": [
+                "Howard Johnson","Dave Chappelle"
+            ]
+        },
+        "specialty": {
+            "type": "string",
+            "title": "The Specialty Schema",
+            "examples": [
+                "Volume Lashes",
+                "Lip Blush"
+            ]
+        },
+        "email": {
+            "type": "string",
+            "format": "email",
+            "title": "The Email Schema",
+            "examples": [
+                "big_guns_mcgee@hotmail.com",
+                "hello@hey.com"
+            ]
+        },
+        "phone": {
+            "type": "string",
+            "pattern": "^(\\([0-9]{3}\\))?[0-9]{3}-[0-9]{4}$",
+            "title": "The Phone Schema",
+            "examples": [
+                "(212)-884-5004"
+            ]
+        }
+    },
+    "examples": [
+        {},
+        {
+            "provider_id": 12
+        },
+        {
+            "email": "hello@hey.com"
+        },
+        {
+            "name": "Jane Smith",
+            "specialty": "Lip Blush",
+            "phone": "(414)889-9054"
+        }
+    ]
+}

@@ -1,0 +1,74 @@
+{
+    "$schema": "https://json-schema.org/draft/2019-09/schema",
+    "$id": "http://example.com/example.json",
+    "type": "object",
+    "default": {},
+    "title": "Root Schema",
+    "required": [],
+    "properties": {
+        "startDate": {
+            "type": "string",
+            "format": "date",
+            "title": "The Start Date Schema",
+            "examples": [
+                "2024-06-01"
+            ]
+        },
+        "endDate": {
+            "type": "string",
+            "format": "date",
+            "title": "The End Date Schema",
+            "examples": [
+                "2024-06-30"
+            ]
+        },
+        "startTime": {
+            "type": "string",
+            "format": "time",
+            "title": "The Start Time Schema",
+            "examples": [
+                "09:00:00+00:00"
+            ]
+        },
+        "endTime": {
+            "type": "string",
+            "format": "time",
+            "title": "The Start Time Schema",
+            "examples": [
+                "17:00:00+00:00"
+            ]
+        },
+        "providerId": {
+            "type": "integer",
+            "title": "The Provider ID Schema",
+            "examples": [
+                1,2,3
+            ]
+        },
+        "availabilityId": {
+            "type": "integer",
+            "title": "The Provider ID Schema",
+            "examples": [
+                1,2,3
+            ]
+        }
+    },
+    "examples": [
+        {},
+        {
+            "availabilityId": 12
+        },
+        {
+            "startDate": "2024-10-01",
+            "endDate": "2024-10-14" ,
+            "provider_id": 3
+        },
+        {
+            "startDate": "2024-10-01",
+            "endDate": "2024-10-14" ,
+            "startTime": "09:00:00",
+            "endTime": "12:00:00",
+            "provider_id": 3
+        }
+    ]
+}

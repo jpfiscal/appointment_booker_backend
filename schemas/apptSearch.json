@@ -1,0 +1,79 @@
+{
+    "$schema": "https://json-schema.org/draft/2019-09/schema",
+    "$id": "http://example.com/example.json",
+    "type": "object",
+    "default": {},
+    "title": "Root Schema",
+    "required": [],
+    "properties": {
+        "appointment_id": {
+            "type": "integer",
+            "title": "The Appt ID Schema",
+            "examples": [
+                1, 2, 3
+            ]
+        },
+        "client_id": {
+            "type": "integer",
+            "title": "The Client ID Schema",
+            "examples": [
+                1, 2, 3
+            ]
+        },
+        "service_id": {
+            "type": "integer",
+            "title": "The Service ID Schema",
+            "examples": [
+                1, 2, 3
+            ]
+        },
+        "provider_id": {
+            "type": "integer",
+            "title": "The Provider ID Schema",
+            "examples": [
+                1, 2, 3
+            ]
+        },
+        "booking_dt_start": {
+            "type": "string",
+            "format": "date",
+            "title": "The Start Date Schema",
+            "examples": [
+                "2024-06-01"
+            ]
+        },
+        "booking_dt_end": {
+            "type": "string",
+            "format": "date",
+            "title": "The End Date Schema",
+            "examples": [
+                "2024-06-30"
+            ]
+        },
+        "status": {
+            "type": "string",
+            "enum": ["booked","accepted","cancelled","completed","noshow"],
+            "examples": [
+                "booked","accepted","cancelled","completed","noshow"
+            ]
+        }
+    },
+    "examples": [
+        {},
+        {
+            "appointment_id": 12
+        },
+        {
+            "client_id": 156,
+            "provider_id": 3
+        },
+        {
+            "client_id": 156,
+            "service_id": 8,
+            "provider_id": 3,
+            "booking_dt_start": "2024-09-01",
+            "booking_dt_end": "2024-11-01",
+            "status": "booked"
+        }
+    ]
+}

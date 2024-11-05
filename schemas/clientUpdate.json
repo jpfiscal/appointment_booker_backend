@@ -1,0 +1,59 @@
+{
+    "$schema": "https://json-schema.org/draft/2019-09/schema",
+    "$id": "http://example.com/example.json",
+    "type": "object",
+    "default": {},
+    "title": "Root Schema",
+    "required": [],
+    "properties": {
+        "gender": {
+            "type": "string",
+            "title": "The Gender Schema",
+            "examples": [
+                "M", "F"
+            ]
+        },
+        "birthday": {
+            "type": "string",
+            "format": "date",
+            "title": "The Birthday From Schema",
+            "examples": [
+                "2000-01-01",
+                "1988-01-01"
+            ]
+        },
+        "address": {
+            "type": "string",
+            "title": "The Address Schema",
+            "examples": [
+                "12 Willow wood Ave.",
+                "29B 22nd St. SW"
+            ]
+        },
+        "city": {
+            "type": "string",
+            "title": "The City Schema",
+            "examples": [
+                "Dallas",
+                "Atlanta"
+            ]
+        },
+        "state": {
+            "type": "string",
+            "title": "The State Schema",
+            "examples": [
+                "AR", "ON"
+            ]
+        }
+    },
+    "examples": [
+        {},
+        {
+            "gender": "F",
+            "birthday": "1988-01-01",
+            "address": "409-112 42nd St.",
+            "city": "New York",
+            "state": "NY"
+        }
+    ]
+}

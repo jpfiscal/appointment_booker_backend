@@ -1,0 +1,39 @@
+{
+    "$schema": "https://json-schema.org/draft/2019-09/schema",
+    "$id": "http://example.com/example.json",
+    "type": "object",
+    "default": {},
+    "title": "Root Schema",
+    "required": [],
+    "properties": {
+        "service_id": {
+            "type": "integer",
+            "title": "The Service ID Schema",
+            "examples": [
+                1, 2, 3
+            ]
+        },
+        "client_note": {
+            "type": "string",
+            "title": "The Client Note Schema",
+            "examples": [
+                "allergies: x, y, z"
+            ]
+        },
+        "status": {
+            "type": "string",
+            "enum": ["booked","accepted","cancelled","completed","noshow"],
+            "title": "The Client Note Schema",
+            "examples": [
+                "booked","accepted","cancelled","completed","noshow"
+            ]
+        }
+    },
+    "examples": [
+        {
+            "service_id": 2,
+            "client_note": "skin is sensative to numbing solutions.",
+            "status": "accepted"
+        }
+    ]
+}

@@ -1,0 +1,69 @@
+{
+    "$schema": "https://json-schema.org/draft/2019-09/schema",
+    "$id": "http://example.com/example.json",
+    "type": "object",
+    "default": {},
+    "title": "Root Schema",
+    "required": [
+        "name",
+        "password",
+        "email",
+        "type"
+
+    ],
+    "properties": {
+        "name": {
+            "type": "string",
+            "default": "",
+            "max": 254,
+            "title": "The Name Schema",
+            "examples": [
+                "Bertrand Russel", "Lebron James"
+            ]
+        },
+        "password": {
+            "type": "string",
+            "default": "",
+            "max": 254,
+            "title": "The Password Schema",
+            "examples": [
+                "password123"
+            ]
+        },
+        "email": {
+            "type": "string",
+            "default": "",
+            "max": 254,
+            "format": "email",
+            "title": "The Email Schema",
+            "examples": [
+                "hello@hey.com"
+            ]
+        },
+        "phone": {
+            "type": "string",
+            "pattern": "^(\\([0-9]{3}\\))?[0-9]{3}-[0-9]{4}$",
+            "max": 254,
+            "title": "The Phone Schema",
+            "examples": [
+                
+            ]
+        },
+        "type": {
+            "type": "string",
+            "enum": ["client", "provider", "admin"],
+            "title": "The Type Schema",
+            "examples": [
+                "client", "provider", "admin"
+            ]
+        }
+       
+    },
+    "examples": [{
+        "name": "Russel Westbrook",
+        "password": "Pa55w0rd_123",
+        "email": "hey@westbrook.com",
+        "phone": "(123)456-7890",
+        "type": "client"
+    }]
+}

@@ -1,0 +1,52 @@
+{
+    "$schema": "https://json-schema.org/draft/2019-09/schema",
+    "$id": "http://example.com/example.json",
+    "type": "object",
+    "default": {},
+    "title": "Root Schema",
+    "required": [
+        "account_id"
+    ],
+    "properties": {
+        "account_id": {
+            "type": "integer",
+            "title": "The Account ID Schema",
+            "examples": [
+                1, 2, 3
+            ]
+        },
+        "specialty": {
+            "type": "string",
+            "title": "The Specialty Schema",
+            "examples": [
+                "Volume Lashes",
+                "Lip Blush"
+            ]
+        },
+        "provider_desc": {
+            "type": "string",
+            "title": "The Provider Description Schema",
+            "examples": [
+                "15 years experience as a lash artist"
+            ]
+        }
+    },
+    "examples": [
+        {},
+        {
+            "appointment_id": 12
+        },
+        {
+            "client_id": 156,
+            "provider_id": 3
+        },
+        {
+            "client_id": 156,
+            "service_id": 8,
+            "provider_id": 3,
+            "booking_dt_start": "2024-09-01",
+            "booking_dt_end": "2024-11-01",
+            "status": "booked"
+        }
+    ]
+}

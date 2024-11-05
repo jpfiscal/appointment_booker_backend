@@ -1,0 +1,59 @@
+{
+    "$schema": "https://json-schema.org/draft/2019-09/schema",
+    "$id": "http://example.com/example.json",
+    "type": "object",
+    "default": {},
+    "title": "Root Schema",
+    "required": [],
+    "properties": {
+        "service_name": {
+            "type": "string",
+            "default": "",
+            "title": "The service_name Schema",
+            "examples": [
+                "Hybrid"
+            ]
+        },
+        "service_group": {
+            "type": "string",
+            "default": "",
+            "title": "The service_group Schema",
+            "examples": [
+                "Brow Bar", "Lash Bar", "Lip Bar"
+            ]
+        },
+        "service_desc": {
+            "type": "string",
+            "default": "",
+            "title": "The service_desc Schema",
+            "examples": [
+                "Nano style tattooing starting near the nose bridge and seamlessly transitioning to umbre for a natural yet bold look."
+            ]
+        },
+        "service_price": {
+            "type": "number",
+            "default": 0,
+            "minimum": 0,
+            "title": "The service_price Schema",
+            "examples": [
+                500.00, 650.49
+            ]
+        },
+        "service_duration": {
+            "type": "integer",
+            "default": 1,
+            "minimum": 0,
+            "title": "The service_duration Schema",
+            "examples": [
+                3,2,1
+            ]
+        }
+    },
+    "examples": [{
+        "service_name": "Hybrid",
+        "service_group": "Brow Bar",
+        "service_desc": "Nano style tattooing starting near the nose bridge and seamlessly transitioning to umbre for a natural yet bold look.",
+        "service_price": 700.00,
+        "service_duration": 3
+    }]
+}
