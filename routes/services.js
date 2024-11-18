@@ -11,11 +11,12 @@ const router = new express.Router();
  * input: N/A
  * returns: [{service_id, service_name, service_group, service_desc, service_price, service_duration}..]
  * auth: logged in
+ * , ensureLoggedIn
  */
 router.get("/", ensureLoggedIn, async (req, res, next) =>{
     try{
         const result = await Service.getAll();
-        return res.json(result.rows);
+        return res.json(result);
     }catch (err) {
         return next(err);
     }
@@ -26,8 +27,10 @@ router.get("/", ensureLoggedIn, async (req, res, next) =>{
  * auth: logged in
  */
 router.get("/:service_id", ensureLoggedIn, async function (req,res,next){
+    
     try{
         const result = await Service.get(req.params.service_id);
+        console.log(`Result: ${JSON.stringify(result)}`);
         return res.json({result});
     }catch(err){
         return next(err);

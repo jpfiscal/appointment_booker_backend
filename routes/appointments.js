@@ -32,16 +32,16 @@ const router = new express.Router();
  */
 router.get("/", ensureLoggedIn, async function (req, res, next){
     
-    const q = req.body;
+    const q = req.query;
     //check to make sure that the start of date range is less than the end of date range
     if (q.booking_dt_start > q.booking_dt_end) throw new BadRequestError(`start of date range is later than the end of date range.`);
     try{
-        const validator = jsonschema.validate(req.body, apptSearchSchema);
+        // const validator = jsonschema.validate(req.body, apptSearchSchema);
         
-        if (!validator.valid) {
-            const errs = validator.errors.map(e => e.stack);
-            throw new BadRequestError(errs);
-        }
+        // if (!validator.valid) {
+        //     const errs = validator.errors.map(e => e.stack);
+        //     throw new BadRequestError(errs);
+        // }
         const appointments = await Appointment.getAll(q);
         return res.json({ appointments });
     }catch(err){
@@ -56,6 +56,7 @@ router.get("/", ensureLoggedIn, async function (req, res, next){
 
 router.post("/", ensureCorrectUserOrAdmin, async function(req, res, next){
     const q = req.body;
+    console.log(`Q!!!: ${JSON.stringify(q)}`);
     try{
         const validator = jsonschema.validate(req.body, apptCreateSchema);
         if (!validator.valid) {

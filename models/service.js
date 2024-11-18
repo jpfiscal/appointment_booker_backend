@@ -11,7 +11,8 @@ class Service {
      */
     static async getAll(){
         const servicesRes = await db.query(`SELECT *
-                    FROM services`);
+                    FROM services
+                    ORDER BY service_group`);
         const services = servicesRes.rows;
         if (!services) throw new NotFoundError(`No services found.`);
         return services;
@@ -72,7 +73,7 @@ class Service {
                                     service_desc,
                                     service_price,
                                     service_duration`;
-        console.log(querySql);
+        
         const result = await db.query(querySql, [...values, serviceId]);
         const service = result.rows[0];
 

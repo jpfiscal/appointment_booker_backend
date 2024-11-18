@@ -87,7 +87,7 @@ class Appointment {
         a.client_note,
         av.date,
         a.status`
-        console.log(`QUERY: ${query}`);
+        
         //Return results
         const appointmentRes = await db.query(query, queryValues);
         return appointmentRes.rows;

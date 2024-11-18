@@ -85,7 +85,7 @@ class Availability {
      * returns a list of availability objects: [{ provider_id, date, start_time, end_time, is_booked}]
      * only returns availabilities whose start times can accomodate the duration of the service
      */
-    static async getByService(serviceId){
+    static async getByService(serviceId, date){
         //get service duration (in hours)
         const serviceRes = await db.query(
             `SELECT service_duration
@@ -135,7 +135,7 @@ class Availability {
         }
         
         // Build the WHERE clause
-        let whereClause = ` WHERE a1.appointment_id is null`
+        let whereClause = ` WHERE a1.date = '${date}' AND a1.appointment_id is null`
         let whereArray = [];
         if (duration > 1){
             for (let i = 2; i <= duration; i++){
@@ -145,9 +145,10 @@ class Availability {
                 whereClause += whereArray.join("");
             }
         }
-        
+
         //put together the full query
         const fullQuery = selectClause + fromClause + whereClause;
+        console.log(`FULL QUERY: ${fullQuery}`);
         const result = await db.query(fullQuery);
         const availabilities = result.rows;
         return availabilities;
@@ -196,13 +197,12 @@ class Availability {
      * Auth: isLoggedIn
      */
     static async updateBooking(availabilityList, appointment_id){
-    
         const result = await db.query(
             `UPDATE availabilities
              SET appointment_id = $1
              WHERE availability_id = ANY($2::integer[])
              RETURNING provider_id, date, start_time, end_time, appointment_id`,
-            [appointment_id, availabilityList.availabilities] // Use the extracted array of IDs
+            [appointment_id, availabilityList] // Use the extracted array of IDs
         );
     
         const availability = result.rows;

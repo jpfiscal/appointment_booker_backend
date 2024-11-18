@@ -20,21 +20,20 @@ const router = new express.Router();
  * Auth: loggedin
 */
 
-router.get("/", ensureLoggedIn, async function (req, res, next){
-    const q = req.body;
-
-    try{
-        const validator = jsonschema.validate(q, clientSearchSchema);
-        if (!validator.valid){
-            const errs = validator.errors.map(e => e.stack);
-            throw new BadRequestError(errs);
-        }
+router.get("/", ensureLoggedIn, async function (req, res, next) {
+    const q = req.query; // Use req.query for GET requests
+    try {
+        // const validator = jsonschema.validate(q, clientSearchSchema);
+        // if (!validator.valid) {
+        //     const errs = validator.errors.map(e => e.stack);
+        //     throw new BadRequestError(errs);
+        // }
         const clients = await Client.getAll(q);
         return res.json({ clients });
-    }catch(err){
+    } catch (err) {
         return next(err);
     }
-})
+});
 
 /** POST / { account_id, gender, birthday, address, city, state } => { client }
  * Returns { client_id, account_id, gender, birthday, address, city, state }
@@ -43,6 +42,7 @@ router.get("/", ensureLoggedIn, async function (req, res, next){
 
 router.post("/", ensureLoggedIn, async function (req, res, next){
     const q = req.body;
+    console.log(`POST INPUT: ${JSON.stringify(q)}`);
     try{
         const validator = jsonschema.validate(q, clientCreateSchema);
         if (!validator.valid){

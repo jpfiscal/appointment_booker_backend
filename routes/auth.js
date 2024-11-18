@@ -46,7 +46,7 @@ router.post("/register", async function (req, res, next) {
         const errs = validator.errors.map(e => e.stack);
         throw new BadRequestError(errs);
       }
-      console.log(`req body: ${JSON.stringify(req.body)}`);
+      
       const newAccount = await Account.register({ ...req.body});
       const token = createToken(newAccount);
       return res.status(201).json({ token });

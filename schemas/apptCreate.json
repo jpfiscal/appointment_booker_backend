@@ -36,7 +36,6 @@
         },
         "client_note": {
             "type": "string",
-            "format": "date",
             "title": "The Client Note Schema",
             "examples": [
                 "allergies: x, y, z"

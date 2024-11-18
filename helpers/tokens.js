@@ -8,6 +8,7 @@ function createToken(account) {
 //       "createToken passed user without isAdmin property");
 
   let payload = {
+    accountId: account.account_id,
     email: account.email,
     isAdmin: account.type === "admin" || false,
     isProvider: account.type === "provider" || false
