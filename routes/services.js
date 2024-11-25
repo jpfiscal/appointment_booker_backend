@@ -30,7 +30,6 @@ router.get("/:service_id", ensureLoggedIn, async function (req,res,next){
     
     try{
         const result = await Service.get(req.params.service_id);
-        console.log(`Result: ${JSON.stringify(result)}`);
         return res.json({result});
     }catch(err){
         return next(err);

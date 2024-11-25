@@ -20,6 +20,7 @@ class Appointment {
    * */
     static async getAll(searchFilters = {}){
         let query = `SELECT
+                        a.appointment_id,
                         acc.name as "Client Name",
                         s.service_name as "Service Name",
                         acc2.name as "Provider Name",
@@ -81,7 +82,9 @@ class Appointment {
             query += " WHERE " 
             + whereExpressions.join(" AND ");
         }
-        query +=` GROUP BY acc.name,
+        query +=` GROUP BY 
+        a.appointment_id,
+        acc.name,
         s.service_name,
         acc2.name,
         a.client_note,
@@ -109,7 +112,7 @@ class Appointment {
         )
         if (availCheck.rows[0]) throw new BadRequestError(`This Availability is already taken by another appointment`);
         
-        //insert record into appointments table
+        //insert record into appointments table 
         const result = await db.query(
             `INSERT INTO appointments (client_id, service_id, client_note, status)
             VALUES ($1, $2, $3, 'booked')

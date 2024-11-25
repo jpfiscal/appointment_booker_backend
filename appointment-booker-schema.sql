@@ -17,6 +17,18 @@ CREATE TABLE accounts (
     type TEXT NOT NULL
 );
 
+CREATE TABLE user_tokens (
+    id SERIAL PRIMARY KEY,
+    account_id INT NOT NULL REFERENCES accounts,
+    access_token TEXT NOT NULL,
+    refresh_token TEXT,
+    access_token_expires TIMESTAMP,
+    refresh_token_expires TIMESTAMP,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE (account_id) -- Add a unique constraint on account_id
+);
+
 CREATE TABLE appointments(
     appointment_id SERIAL PRIMARY KEY,
     client_id INTEGER REFERENCES clients ON DELETE CASCADE,

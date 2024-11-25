@@ -190,6 +190,35 @@ class Account {
 
         if (!account) throw new NotFoundError(`No account with ID ${accountId} found.`);
     }
+
+    static async findGoogleToken(accountId){
+        
+        const result = await db.query(
+            `SELECT *
+            FROM user_tokens
+            WHERE account_id = $1`,
+            [accountId]
+        );
+        const account = result.rows[0];
+        return account;
+    }
+
+    /**Update refreshes access token after expiry */
+    static async updateGoogleToken(userId, tokenData){
+        const {access_token, access_token_expires, refresh_token} = tokenData;
+        const result = await db.query(
+            `UPDATE user_tokens
+            SET access_token = $1, access_token_expires = $2, refresh_token = $3
+            WHERE account_id = $4
+            RETURNING
+                account_id,
+                access_token,
+                refresh_token,
+                access_token_expires`,
+            [access_token, access_token_expires, refresh_token, userId]
+        );
+        return result;
+    }
 }
 
 module.exports = Account;

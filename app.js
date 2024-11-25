@@ -15,10 +15,35 @@ const availabilityRoutes = require ("./routes/availabilities");
 const clientRoutes = require("./routes/clients");
 const providerRoutes = require("./routes/providers");
 const appointmentRoutes = require("./routes/appointments");
+const session = require('express-session');
 
 const app = express();
 
-app.use(cors());
+app.use(cors({
+    origin: (origin, callback) => {
+      const allowedOrigins = ['http://127.0.0.1:5173', 'http://localhost:5173']; // Frontend origins
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error('Not allowed by CORS'));
+      }
+    },
+    methods: 'GET,POST,PATCH,DELETE,OPTIONS',
+    credentials: true, // Enable sending cookies
+  }));
+
+//set up session
+app.use(session({
+    secret: 'your-secret-key', // A strong unique secret
+    resave: false,             // Avoid unnecessary resaving
+    saveUninitialized: true,   // Save session even if it's empty
+    cookie: {
+      secure: false,           // Use `true` only if using HTTPS
+      httpOnly: true,          // Prevent JavaScript access to cookies
+      maxAge: 24 * 60 * 60 * 1000, // 1 day
+    },
+  }));
+
 app.use(express.json());
 app.use(authenticateJWT);
 

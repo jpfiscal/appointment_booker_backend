@@ -47,7 +47,7 @@ router.get("/", async function (req, res, next){
 */
 router.get("/service/:serviceId", ensureLoggedIn, async function (req, res, next){
     const q = req.query;
-    console.log(`Q: ${JSON.stringify(q.date)}`);
+    //console.log(`Q: ${JSON.stringify(q.date)}`);
     try{
         const availabilities = await Availability.getByService(req.params.serviceId, q.date);
         return res.json({ availabilities });

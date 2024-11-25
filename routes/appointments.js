@@ -43,6 +43,7 @@ router.get("/", ensureLoggedIn, async function (req, res, next){
         //     throw new BadRequestError(errs);
         // }
         const appointments = await Appointment.getAll(q);
+        
         return res.json({ appointments });
     }catch(err){
         next(err);
@@ -56,7 +57,6 @@ router.get("/", ensureLoggedIn, async function (req, res, next){
 
 router.post("/", ensureCorrectUserOrAdmin, async function(req, res, next){
     const q = req.body;
-    console.log(`Q!!!: ${JSON.stringify(q)}`);
     try{
         const validator = jsonschema.validate(req.body, apptCreateSchema);
         if (!validator.valid) {

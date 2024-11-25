@@ -1,15 +1,153 @@
 "use strict";
 
-/** Routes for authentication. */
-
 const Account = require("../models/account");
+const { google } = require('googleapis');
+const calendar = google.calendar('v3');
 const express = require("express");
 const router = new express.Router();
-const { createToken } = require("../helpers/tokens");
+const { createToken, getTokens, storeTokens} = require("../helpers/tokens");
+const { convertToDateTime } = require("../helpers/utilties");
 const jsonschema = require("jsonschema");
 const AuthSchema = require("../schemas/auth.json");
 const RegisterSchema = require("../schemas/register.json");
 const { BadRequestError } = require("../expressError");
+const jwt = require('jsonwebtoken');
+const SECRET = 'your-secret-key'; // Use an environment variable in production
+
+
+const oauth2Client = new google.auth.OAuth2(
+  "390152689738-g7sjcrclfan6ink2u97h58f9ndggj3i5.apps.googleusercontent.com",
+  "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",
+  "http://localhost:3001/auth/google/callback"
+);
+
+/** REDIRECT TO GOOGLE AUTH URL */
+router.get('/google', (req, res) => {
+  const userId = req.query.userId;
+  if (!userId) {
+    return res.status(400).json({ error: 'Missing userId in query' });
+  }
+
+  const state = `test-state-${userId}`;
+
+  const authUrl = oauth2Client.generateAuthUrl({
+    access_type: 'offline',
+    prompt: 'consent',
+    scope: ['https://www.googleapis.com/auth/calendar.events','https://www.googleapis.com/auth/calendar'],
+    state, // Pass the state directly
+  });
+
+  console.log(`Auth URL: ${authUrl}`);
+  res.redirect(authUrl);
+});
+
+/** GET /auth/google/callback: 
+ * Endpoint to handle Google OAuth redirection
+ * Authorization required: none
+ */
+router.get('/google/callback', async (req, res) => {
+  try {
+    const { code, state } = req.query;
+
+    if (!state) {
+      throw new Error('Missing state parameter');
+    }
+
+    const userId = state.replace('test-state-', ''); // Extract userId from state
+
+    if (!userId) {
+      throw new Error('User ID is missing');
+    }
+
+    // Exchange authorization code for access tokens
+    const { tokens } = await oauth2Client.getToken(code);
+    oauth2Client.setCredentials(tokens);
+
+    // Save tokens to the database
+    await storeTokens(userId, tokens.access_token, tokens.refresh_token, convertToDateTime(tokens.expiry_date));
+
+    res.redirect('http://localhost:5173?authSuccess=true');
+  } catch (err) {
+    console.error('Error during Google OAuth callback:', err);
+    res.status(400).json({ error: 'Failed to authenticate with Google' });
+  }
+});
+
+
+/** POST /create-event: 
+ * Endpoint to create a Google Calendar event
+ * Authorization required: none
+ */
+router.post('/create-event', async (req, res) => {
+  try{
+    const { userId, summary, description, start, end } = req.body;
+    
+    //Retrieve token data from db
+    const TokenData = await Account.findGoogleToken(userId);
+    //console.log(`TOKEN DATA: ${JSON.stringify(TokenData)}`);
+
+    //set tokens in oauth2Client
+    oauth2Client.setCredentials({
+      access_token: TokenData.access_token,
+      refresh_token: TokenData.refresh_token,
+      expiry_date: TokenData.access_token_expires,
+    });
+    
+    //check if token is expiring
+    //convert timestamp into UTC (times get called out of the DB in MST...)
+    //(A) Need to figure out a way to store times as UTC in DB
+    const expiryTimestampUTC = new Date(TokenData.access_token_expires).getTime() - 7*60*60*1000;
+    if(expiryTimestampUTC < Date.now()){
+      console.log(`TOKEN IS EXPIRED!!!`);
+      try{
+        //get new tokens from Google Auth API
+        const newTokens = await oauth2Client.refreshAccessToken();
+        oauth2Client.setCredentials(newTokens.tokens);
+        console.log(`newToken: ${JSON.stringify(newTokens)}`);
+        //update DB with new access tokens
+        await Account.updateGoogleToken(userId, {
+          access_token: newTokens.credentials.access_token,
+          access_token_expires: convertToDateTime(newTokens.credentials.expiry_date),
+          refresh_token: newTokens.credentials.refresh_token
+        });
+        //reset oauth credentials with refreshed tokens
+        oauth2Client.setCredentials({
+          access_token: newTokens.credentials.access_token,
+          refresh_token: newTokens.credentials.refresh_token,
+          expiry_date: newTokens.credentials.expiry_date,
+        });
+      }catch(err){
+        console.error('Error refreshing access token:', err);
+        return res.status(500).json({ error: 'Failed to refresh access token' });
+      }
+    }
+
+    //prepare event object
+    const event = {
+      summary,
+      description,
+      start: { 
+        dateTime: start, 
+        timeZone: 'America/Edmonton'},
+      end: { 
+        dateTime: end, 
+        timeZone: 'America/Edmonton'},
+    };
+
+    //insert event into Google Calendar
+    const response = await calendar.events.insert({
+      auth: oauth2Client,
+      calendarId: 'primary',
+      resource: event
+    });
+
+    console.log('Event created:', response.data);
+    res.json(response.data);
+  } catch (err) {
+    console.error('Error creating event:', JSON.stringify(err.response?.data) || err.message);
+    res.status(500).json({error: 'Failed to create event'});
+  }
+})
 
 /** POST /auth/token:  { email, password } => { token }
  * Returns JWT token which can be used to authenticate further requests.
@@ -54,6 +192,15 @@ router.post("/register", async function (req, res, next) {
       return next(err);
     }
 });
+
+router.get("/find-google-token/:account_id", async function (req, res, next){
+  try{
+    const result = await Account.findGoogleToken(req.params.account_id);
+    return res.json({result});
+  }catch(err){
+    return next(err);
+  }
+})
   
   
 module.exports = router;
