@@ -12,13 +12,17 @@ const AuthSchema = require("../schemas/auth.json");
 const RegisterSchema = require("../schemas/register.json");
 const { BadRequestError } = require("../expressError");
 const jwt = require('jsonwebtoken');
-const SECRET = 'your-secret-key'; // Use an environment variable in production
+require("dotenv").config();
+const SECRET = process.env.SECRET_KEY;
 
+const googleClientId = process.env.GOOGLE_CLIENT_ID;
+const googleClientSecret = process.env.GOOGLE_CLIENT_SECRET;
+const googleCallbackUrl = process.env.GOOGLE_CALLBACK_URL
 
 const oauth2Client = new google.auth.OAuth2(
-  "390152689738-g7sjcrclfan6ink2u97h58f9ndggj3i5.apps.googleusercontent.com",
-  "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",
-  "http://localhost:3001/auth/google/callback"
+  googleClientId,
+  googleClientSecret,
+  googleCallbackUrl
 );
 
 /** REDIRECT TO GOOGLE AUTH URL */
