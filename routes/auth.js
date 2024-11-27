@@ -52,7 +52,7 @@ router.get('/google', (req, res) => {
 router.get('/google/callback', async (req, res) => {
   try {
     const { code, state } = req.query;
-
+    console.log(`NOW IN CALLBACK!`)
     if (!state) {
       throw new Error('Missing state parameter');
     }
@@ -66,7 +66,7 @@ router.get('/google/callback', async (req, res) => {
     // Exchange authorization code for access tokens
     const { tokens } = await oauth2Client.getToken(code);
     oauth2Client.setCredentials(tokens);
-
+    console.log(`TOKENS: ${JSON.stringify(tokens)}`);
     // Save tokens to the database
     await storeTokens(userId, tokens.access_token, tokens.refresh_token, convertToDateTime(tokens.expiry_date));
 

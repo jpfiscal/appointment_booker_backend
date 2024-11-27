@@ -2,6 +2,7 @@
 
 const db = require("../db");
 const bcrypt = require("bcrypt");
+const {encrypt, decrypt} = require("../helpers/utilties");
 const { sqlForPartialUpdate } = require("../helpers/sql");
 const {
   NotFoundError,
@@ -200,12 +201,27 @@ class Account {
             [accountId]
         );
         const account = result.rows[0];
-        return account;
+        if (!account){
+            return undefined;
+        }
+        console.log(`ACCOUNT : ${JSON.stringify(account)}`);
+        const res = {
+            "id":account.id,
+            "account_id": account.account_id,
+            "access_token": await decrypt(account.access_token),
+            "refresh_token": await decrypt(account.refresh_token),
+            "access_token_expires": account.access_token_expires,
+            "refresh_token_expires": account.refresh_token_expires
+        }
+        return res;
     }
 
     /**Update refreshes access token after expiry */
     static async updateGoogleToken(userId, tokenData){
         const {access_token, access_token_expires, refresh_token} = tokenData;
+        const encrypted_access_token = await encrypt(access_token);
+        const encrypted_refresh_token = await encrypt(refresh_token);
+        
         const result = await db.query(
             `UPDATE user_tokens
             SET access_token = $1, access_token_expires = $2, refresh_token = $3
@@ -215,7 +231,7 @@ class Account {
                 access_token,
                 refresh_token,
                 access_token_expires`,
-            [access_token, access_token_expires, refresh_token, userId]
+            [encrypted_access_token, access_token_expires, encrypted_refresh_token, userId]
         );
         return result;
     }
