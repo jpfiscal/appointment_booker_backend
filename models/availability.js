@@ -148,7 +148,6 @@ class Availability {
 
         //put together the full query
         const fullQuery = selectClause + fromClause + whereClause;
-        //console.log(`FULL QUERY: ${fullQuery}`);
         const result = await db.query(fullQuery);
         const availabilities = result.rows;
         return availabilities;

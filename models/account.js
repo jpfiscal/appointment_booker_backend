@@ -135,7 +135,6 @@ class Account {
                       FROM accounts
                       WHERE email = $1`,[data.email]);
         const emailFound = emailFoundSQL.rows[0];
-        console.log(`EMAIL FOUND: ${JSON.stringify(emailFound)}`);
         if (emailFound) throw new BadRequestError(`The email "${data.email}" is already taken by another account`);
     }
     //if user decides to change the password, the password will need to be hashed first
@@ -155,7 +154,6 @@ class Account {
     );
     const handleVarIdx = "$" + (values.length + 1);
 
-    console.log(`VALUES: ${values}`);
     const querySql = `UPDATE accounts
                       SET ${setCols}
                       WHERE account_id = ${handleVarIdx}
@@ -204,7 +202,7 @@ class Account {
         if (!account){
             return undefined;
         }
-        console.log(`ACCOUNT : ${JSON.stringify(account)}`);
+        
         const res = {
             "id":account.id,
             "account_id": account.account_id,

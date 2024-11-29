@@ -24,7 +24,6 @@ async function checkDuplicates(data, providerId){
             );
 
     const availabilities = res.rows;
-    console.log(`dup check: ${JSON.stringify(availabilities)}`);
     return availabilities.length > 0;
 }
 

@@ -92,7 +92,6 @@ class Client {
             `SELECT * FROM accounts WHERE account_id = $1`, [account_id]
         );
         const account = accountRes.rows[0];
-        console.log(`ACCOUNT: ${JSON.stringify(account)}`);
         if (!account) throw new NotFoundError(`Account associated to account ID: ${account_id} does not exist.`);
         
         //check to see if another client is already linked to the passed in account_id
@@ -100,7 +99,6 @@ class Client {
             `SELECT client_id FROM clients WHERE account_id = $1`, [account_id]
         );
         const clientCheck = clientCheckRes.rows[0];
-        console.log(`clientCheck: ${JSON.stringify(clientCheck)}`);
         if (clientCheck) throw new BadRequestError(`There is already a client associated to account ID: ${account_id}.`);
 
         //insert record into clients table

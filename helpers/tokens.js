@@ -40,9 +40,8 @@ async function getTokens(userId) {
 
 //ecnrypts the received access and refresh tokens and saves them into the db
 async function storeTokens(userId, accessToken, refreshToken, expiryDate) {
-  const encryptedAccessToken = accessToken; //encrypt these tokens
-  const encryptedRefreshToken = refreshToken; //encrypt these tokens
-  console.log(`INPUTS: ${userId}, Atoken: ${accessToken}, refreshToken: ${refreshToken}, expiry: ${expiryDate}`);
+  const encryptedAccessToken = accessToken; 
+  const encryptedRefreshToken = refreshToken; 
   // Insert into the database
   await db.query(
       `INSERT INTO user_tokens (account_id, access_token, refresh_token, access_token_expires) 

@@ -41,7 +41,6 @@ router.get('/google', (req, res) => {
     state, // Pass the state directly
   });
 
-  console.log(`Auth URL: ${authUrl}`);
   res.redirect(authUrl);
 });
 
@@ -52,7 +51,6 @@ router.get('/google', (req, res) => {
 router.get('/google/callback', async (req, res) => {
   try {
     const { code, state } = req.query;
-    console.log(`NOW IN CALLBACK!`)
     if (!state) {
       throw new Error('Missing state parameter');
     }
@@ -66,7 +64,6 @@ router.get('/google/callback', async (req, res) => {
     // Exchange authorization code for access tokens
     const { tokens } = await oauth2Client.getToken(code);
     oauth2Client.setCredentials(tokens);
-    console.log(`TOKENS: ${JSON.stringify(tokens)}`);
     // Save tokens to the database
     await storeTokens(userId, tokens.access_token, tokens.refresh_token, convertToDateTime(tokens.expiry_date));
 
@@ -88,7 +85,6 @@ router.post('/create-event', async (req, res) => {
     
     //Retrieve token data from db
     const TokenData = await Account.findGoogleToken(userId);
-    //console.log(`TOKEN DATA: ${JSON.stringify(TokenData)}`);
 
     //set tokens in oauth2Client
     oauth2Client.setCredentials({
@@ -102,12 +98,10 @@ router.post('/create-event', async (req, res) => {
     //(A) Need to figure out a way to store times as UTC in DB
     const expiryTimestampUTC = new Date(TokenData.access_token_expires).getTime() - 7*60*60*1000;
     if(expiryTimestampUTC < Date.now()){
-      console.log(`TOKEN IS EXPIRED!!!`);
       try{
         //get new tokens from Google Auth API
         const newTokens = await oauth2Client.refreshAccessToken();
         oauth2Client.setCredentials(newTokens.tokens);
-        console.log(`newToken: ${JSON.stringify(newTokens)}`);
         //update DB with new access tokens
         await Account.updateGoogleToken(userId, {
           access_token: newTokens.credentials.access_token,
@@ -145,7 +139,6 @@ router.post('/create-event', async (req, res) => {
       resource: event
     });
 
-    console.log('Event created:', response.data);
     res.json(response.data);
   } catch (err) {
     console.error('Error creating event:', JSON.stringify(err.response?.data) || err.message);

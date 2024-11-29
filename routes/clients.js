@@ -42,7 +42,6 @@ router.get("/", ensureLoggedIn, async function (req, res, next) {
 
 router.post("/", ensureLoggedIn, async function (req, res, next){
     const q = req.body;
-    console.log(`POST INPUT: ${JSON.stringify(q)}`);
     try{
         const validator = jsonschema.validate(q, clientCreateSchema);
         if (!validator.valid){

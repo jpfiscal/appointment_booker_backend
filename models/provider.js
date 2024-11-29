@@ -152,7 +152,6 @@ class Provider {
             [providerId]
         );
         const serviceCheck = serviceCheckRes.rows[0];
-        console.log(`SERVICE CHECK: ${serviceCheck}`);
         if (serviceCheck != null) throw new BadRequestError(`One or more services requested are already linked to this provider.`);
         
         //insert serviceId values into service_provider table for provider with providerId
@@ -187,7 +186,7 @@ class Provider {
             WHERE provider_id = $1`, [providerId])
         const serviceCheck = serviceCheckRes.rows;
         const serviceCheckList = serviceCheck.map(service => service.service_id);
-        console.log(serviceCheckList);
+    
         for (let i = 0; i < services.length; i++){
             if (!serviceCheckList.includes(services[i])) throw new BadRequestError(`One or more services requested are not linked to this provider.`);
         }
