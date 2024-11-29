@@ -13,6 +13,7 @@ const router = new express.Router();
  * auth: logged in
  * , ensureLoggedIn
  */
+
 router.get("/", ensureLoggedIn, async (req, res, next) =>{
     try{
         const result = await Service.getAll();
@@ -21,7 +22,8 @@ router.get("/", ensureLoggedIn, async (req, res, next) =>{
         return next(err);
     }
 })
-/** GET / 
+
+/** GET /
  * input: service_id --> query string
  * returns: {service_id, service_name, service_group, service_desc, service_price, service_duration}
  * auth: logged in
@@ -36,7 +38,7 @@ router.get("/:service_id", ensureLoggedIn, async function (req,res,next){
     }
 })
 
-/** POST / 
+/** POST /
  * input: {service_name, service_group, service_desc, service_price, service_duration}
  * returns: {service_name, service_group}
  * auth: admin, provider
