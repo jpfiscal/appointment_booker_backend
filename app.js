@@ -23,7 +23,7 @@ const app = express();
 
 app.use(cors({
     origin: (origin, callback) => {
-      const allowedOrigins = ['http://127.0.0.1:5173', 'http://localhost:5173', FE_URL]; // Frontend origins
+      const allowedOrigins = ['http://127.0.0.1:5173', 'http://localhost:5173', FE_URL, "https://appointment-booker-ph4l.onrender.com"]; // Frontend origins
       if (!origin || allowedOrigins.includes(origin)) {
         callback(null, true);
       } else {
