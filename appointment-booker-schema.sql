@@ -1,4 +1,13 @@
-CREATE TABLE clients (
+CREATE TABLE public.accounts (
+    account_id SERIAL PRIMARY KEY,
+    name TEXT NOT NULL,
+    password TEXT NOT NULL,
+    email TEXT NOT NULL CHECK (position('@' IN email) > 1),
+    phone VARCHAR(14),
+    type TEXT NOT NULL
+);
+
+CREATE TABLE public.clients (
     client_id SERIAL PRIMARY KEY,
     account_id INTEGER REFERENCES accounts ON DELETE CASCADE,
     gender VARCHAR(50),
@@ -8,16 +17,14 @@ CREATE TABLE clients (
     state VARCHAR(100)
 );
 
-CREATE TABLE accounts (
-    account_id SERIAL PRIMARY KEY,
-    name TEXT NOT NULL,
-    password TEXT NOT NULL,
-    email TEXT NOT NULL CHECK (position('@' IN email) > 1),
-    phone VARCHAR(14),
-    type TEXT NOT NULL
+CREATE TABLE public.providers(
+    provider_id SERIAL PRIMARY KEY,
+    account_id INTEGER REFERENCES accounts,
+    specialty TEXT,
+    provider_desc TEXT
 );
 
-CREATE TABLE user_tokens (
+CREATE TABLE public.user_tokens (
     id SERIAL PRIMARY KEY,
     account_id INT NOT NULL REFERENCES accounts,
     access_token TEXT NOT NULL,
@@ -29,16 +36,7 @@ CREATE TABLE user_tokens (
     UNIQUE (account_id) -- Add a unique constraint on account_id
 );
 
-CREATE TABLE appointments(
-    appointment_id SERIAL PRIMARY KEY,
-    client_id INTEGER REFERENCES clients ON DELETE CASCADE,
-    service_id INTEGER REFERENCES services,
-    availability_id INTEGER REFERENCES availabilities,
-    client_note TEXT,
-    status TEXT NOT NULL
-);
-
-CREATE TABLE services(
+CREATE TABLE public.services(
     service_id SERIAL PRIMARY KEY,
     service_name TEXT NOT NULL,
     service_group TEXT NOT NULL,
@@ -47,20 +45,21 @@ CREATE TABLE services(
     service_duration INTEGER NOT NULL
 );
 
-CREATE TABLE providers(
-    provider_id SERIAL PRIMARY KEY,
-    account_id INTEGER REFERENCES accounts,
-    specialty TEXT,
-    provider_desc TEXT
+CREATE TABLE public.appointments(
+    appointment_id SERIAL PRIMARY KEY,
+    client_id INTEGER REFERENCES clients ON DELETE CASCADE,
+    service_id INTEGER REFERENCES services,
+    client_note TEXT,
+    status TEXT NOT NULL
 );
 
-CREATE TABLE service_provider(
+CREATE TABLE public.service_provider(
     service_provider_id SERIAL PRIMARY KEY,
     provider_id INTEGER REFERENCES providers ON DELETE CASCADE,
     service_id INTEGER REFERENCES services ON DELETE CASCADE
 );
 
-CREATE TABLE availabilities(
+CREATE TABLE public.availabilities(
     availability_id SERIAL PRIMARY KEY,
     provider_id INTEGER REFERENCES providers ON DELETE CASCADE,
     service_id INTEGER REFERENCES services,

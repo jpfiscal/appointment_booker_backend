@@ -16,12 +16,14 @@ const clientRoutes = require("./routes/clients");
 const providerRoutes = require("./routes/providers");
 const appointmentRoutes = require("./routes/appointments");
 const session = require('express-session');
+const FE_URL = process.env.FRONTEND_URL;
+
 
 const app = express();
 
 app.use(cors({
     origin: (origin, callback) => {
-      const allowedOrigins = ['http://127.0.0.1:5173', 'http://localhost:5173']; // Frontend origins
+      const allowedOrigins = ['http://127.0.0.1:5173', 'http://localhost:5173', FE_URL]; // Frontend origins
       if (!origin || allowedOrigins.includes(origin)) {
         callback(null, true);
       } else {

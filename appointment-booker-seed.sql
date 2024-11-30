@@ -2,7 +2,7 @@ INSERT INTO accounts (name, password, email, phone, type)
 VALUES ('Mandy C',
     '$2b$12$AZH7virni5jlTTiGgEg4zu3lSvAw68qVEfSIOjJ3RqtbJbdW/Oi5q',
     'info@marveleyes.ca',
-    '(123) 456- 7890',
+    '(123) 456-7890',
     'provider');
 
 INSERT INTO providers (account_id, specialty, provider_desc)
