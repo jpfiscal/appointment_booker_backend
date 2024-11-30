@@ -17,7 +17,8 @@ const SECRET = process.env.SECRET_KEY;
 
 const googleClientId = process.env.GOOGLE_CLIENT_ID;
 const googleClientSecret = process.env.GOOGLE_CLIENT_SECRET;
-const googleCallbackUrl = process.env.GOOGLE_CALLBACK_URL
+const googleCallbackUrl = process.env.GOOGLE_CALLBACK_URL;
+const baseUrl = process.env.BASE_URL;
 
 const oauth2Client = new google.auth.OAuth2(
   googleClientId,
@@ -67,7 +68,7 @@ router.get('/google/callback', async (req, res) => {
     // Save tokens to the database
     await storeTokens(userId, tokens.access_token, tokens.refresh_token, convertToDateTime(tokens.expiry_date));
 
-    res.redirect('http://localhost:5173?authSuccess=true');
+    res.redirect(`${baseUrl}?authSuccess=true`);
   } catch (err) {
     console.error('Error during Google OAuth callback:', err);
     res.status(400).json({ error: 'Failed to authenticate with Google' });
