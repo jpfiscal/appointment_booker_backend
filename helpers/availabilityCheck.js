@@ -9,22 +9,28 @@ const db = require("../db");
 async function checkDuplicates(data, providerId){
     let dateList = [];
     let startTimeList = [];
+
     //populate dateList and startTimeList
-    data.availabilities.forEach(async availability => {
+    for (const availability of data.availabilities) {
         dateList.push(availability.date);
         startTimeList.push(availability.start_time);
-    })
+    }
     
-    const res = await db.query(`SELECT availability_id
-                    FROM availabilities
-                    WHERE provider_id = $1
-                    AND date = ANY($2::date[])
-                    AND start_time = ANY($3::time[])`,
-                [providerId, dateList, startTimeList]
-            );
+    try{
+        const res = await db.query(`SELECT availability_id
+            FROM availabilities
+            WHERE provider_id = $1
+            AND date = ANY($2::date[])
+            AND start_time = ANY($3::time[])`,
+            [providerId, dateList, startTimeList]
+        );
 
-    const availabilities = res.rows;
-    return availabilities.length > 0;
+        const availabilities = res.rows;
+        return availabilities.length > 0;
+    }catch (error){
+        console.error("Error executing db query:", error);
+        throw new Error("Failed to check for duplicate availabilities");
+    }
 }
 
 module.exports = { checkDuplicates };
